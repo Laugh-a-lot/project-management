@@ -1,6 +1,5 @@
 import CreateNewTaskDialog from "./CreateNewTaskDialog";
 import { api } from "~/utils/api";
-import Image from "next/image";
 import Task from "../task/Task";
 
 export default function HomePage() {

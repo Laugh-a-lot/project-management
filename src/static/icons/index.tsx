@@ -1,4 +1,4 @@
-function PlusIcon(props) {
+function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -18,7 +18,7 @@ function PlusIcon(props) {
   );
 }
 
-function SearchIcon(props) {
+function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -38,7 +38,7 @@ function SearchIcon(props) {
   );
 }
 
-function UsersIcon(props) {
+function UsersIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -60,7 +60,7 @@ function UsersIcon(props) {
   );
 }
 
-function BellIcon(props) {
+function BellIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -80,7 +80,7 @@ function BellIcon(props) {
   );
 }
 
-function HomeIcon(props) {
+function HomeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -100,7 +100,7 @@ function HomeIcon(props) {
   );
 }
 
-function LineChartIcon(props) {
+function LineChartIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -120,7 +120,7 @@ function LineChartIcon(props) {
   );
 }
 
-function Package2Icon(props) {
+function Package2Icon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -141,7 +141,7 @@ function Package2Icon(props) {
   );
 }
 
-function PackageIcon(props) {
+function PackageIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

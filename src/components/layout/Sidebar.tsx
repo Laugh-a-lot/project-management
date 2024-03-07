@@ -1,18 +1,15 @@
 import Link from "next/link";
 import React from "react";
 import {
-  BellIcon,
   HomeIcon,
   LineChartIcon,
   Package2Icon,
   PackageIcon,
   UsersIcon,
 } from "~/static/icons";
-import { Button } from "../ui/button";
 
-type Props = {};
 
-const Sidebar = (props: Props) => {
+const Sidebar = () => {
   return (
     <div className="hidden border-r bg-gray-100/40 dark:bg-gray-800/40 lg:block">
       <div className="flex h-full max-h-screen flex-col gap-2">

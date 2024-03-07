@@ -14,6 +14,9 @@ export default {
 
       stack.addOutputs({
         SiteUrl: site.url,
+        environment: {
+          DATABASE_URL: process.env.DATABASE_URL,
+        }
       });
     });
   },

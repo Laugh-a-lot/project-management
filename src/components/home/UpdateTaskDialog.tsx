@@ -13,7 +13,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { RadioGroupItem, RadioGroup } from "../ui/radio-group";
-import { Pencil, PlusIcon } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { MultiSelectInput, type Option } from "../ui/custom-multiple-select";
 import { api } from "~/utils/api";
 import { type Task } from "../task/Task";
@@ -64,14 +64,14 @@ const UpdateTaskDialog = ({ task, refetch }: Props) => {
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
       assignedTo: userOption
-        .filter(({ value, checked }) => checked)
+        .filter(({ checked }) => checked)
         .map(({ value }) => value),
       dueDate: new Date(dueDate).toISOString() ?? "",
       priority,
     };
 
     mutate(taskData, {
-      onSettled(data, error, variables, context) {
+      onSettled() {
         setIsOpen(false);
         refetch();
       },
@@ -88,7 +88,7 @@ const UpdateTaskDialog = ({ task, refetch }: Props) => {
           checked: task.assigned_to.some(({ email }) => email === user.email),
         })),
       );
-  }, [userList]);
+  }, [userList, task.assigned_to]);
   return (
     <Dialog key="1" open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>

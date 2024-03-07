@@ -17,6 +17,7 @@ import { PlusIcon } from "lucide-react";
 import { MultiSelectInput, type Option } from "../ui/custom-multiple-select";
 import { api } from "~/utils/api";
 
+
 interface FormData {
   title: string;
   description: string;
@@ -63,7 +64,7 @@ export default function CreateNewTaskDialog({
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
       assignedTo: userOption
-        .filter(({ value, checked }) => checked)
+        .filter(({ checked }) => checked)
         .map(({ value }) => value),
       dueDate: new Date(dueDate).toISOString(),
       priority,

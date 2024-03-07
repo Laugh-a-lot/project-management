@@ -1,5 +1,3 @@
-import { type DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,9 +8,8 @@ import {
 } from "./dropdown-menu";
 import { Button } from ".";
 import { PlusIcon } from "~/static/icons";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 export interface Option {
   label: string;
@@ -22,12 +19,13 @@ export interface Option {
 type Props = {
   options: Option[];
   placeholder: string;
-  setOptions: (arg0:unknown) => void;
+  setOptions: Dispatch<SetStateAction<Option[]>>;
 };
 
 export function MultiSelectInput({ options, placeholder, setOptions }: Props) {
   function handleCheckChange(checked: boolean, value: string) {
-    setOptions(options.map((option) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    setOptions( options.map((option) => {
         if (option.value == value) option.checked = checked;
         return option;
       }),

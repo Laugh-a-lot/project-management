@@ -5,6 +5,8 @@ const userUpdateSchema = z.object({
   name: z.string(),
   image: z.string(),
 });
+
+
 export const userRouter = createTRPCRouter({
   me: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.db.user.findUnique({
@@ -14,6 +16,7 @@ export const userRouter = createTRPCRouter({
     });
     return user;
   }),
+
   updateDetails: protectedProcedure
     .input(userUpdateSchema)
     .mutation(async ({ ctx, input }) => {
@@ -25,7 +28,8 @@ export const userRouter = createTRPCRouter({
       });
       return user;
     }),
-  getAllUser: protectedProcedure.query(async ({ ctx, input }) => {
+  
+  getAllUser: protectedProcedure.query(async ({ ctx }) => {
     const getAllUser = await ctx.db.user.findMany();
     return getAllUser;
   }),

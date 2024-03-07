@@ -1,8 +1,3 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/43mpGOHpD19
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { Button } from "~/components/ui/button";
 import { AvatarImage, AvatarFallback, Avatar } from "~/components/ui/avatar";
 import { Label } from "~/components/ui/label";
@@ -12,24 +7,31 @@ import { api } from "~/utils/api";
 import Image from "next/image";
 import { type FormEvent, useState, useEffect } from "react";
 import { Trash, User2 } from "lucide-react";
-import { type User, type User as UserType } from "@prisma/client";
 import { supabaseClient } from "~/supabase/server";
+
+interface User {
+  name: string;
+  email: string;
+  image: string | null;
+}
 
 export default function ProfileSettings() {
   const { mutate } = api.user.updateDetails.useMutation();
   const utils = api.useUtils();
-  const [user, setUser] = useState<User>();
-  const [formData, setFormData] = useState({ name: "", image: "" });
-  const [loading, setLoading] = useState(false); 
+  const [user, setUser] = useState<User | null>(null);
+  const [formData, setFormData] = useState<{ name: string; image: string }>({
+    name: "",
+    image: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-  
   const fetchUserData = async () => {
     try {
       setLoading(true);
       const user = await utils.user.me.fetch();
       if (user) {
-        setUser(user);
-        setFormData({ name: user.name, image: user.image });
+        setUser(user as User);
+        setFormData({ name: user.name, image: user.image ?? "" });
       }
     } catch (err) {
       console.error(err);
@@ -41,28 +43,24 @@ export default function ProfileSettings() {
     e.preventDefault();
 
     const form = Object.fromEntries(new FormData(e.target as HTMLFormElement));
-    // Create a new object to avoid mutating the original form data
     const updatedData = { ...formData };
 
-    if (form.image.name) {
+    if (typeof form.image == "object" && form.image.name) {
       try {
         const { data, error } = await supabaseClient.storage
           .from("avatars")
           .upload(form.image.name, form.image, { upsert: true });
 
-        // Check for upload errors
         if (error) {
-          throw new Error("Error uploading image:", error);
+          throw new Error(`Error uploading image: ${error.message}`);
         }
 
-        // Get the public URL for the uploaded image
         const { data: imageLink } = supabaseClient.storage
           .from("avatars")
-          .getPublicUrl(`${data.path}` ?? "");
+          .getPublicUrl(`${data.path}`);
 
         updatedData.image = imageLink.publicUrl;
       } catch (error) {
-        // Handle upload errors gracefully, e.g., display an error message to the user
         console.error(error);
       }
     }
@@ -74,7 +72,9 @@ export default function ProfileSettings() {
 
   useEffect(() => {
     void fetchUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Card key="1" className="m-auto w-full max-w-3xl p-8">
       {loading ? (
@@ -90,10 +90,12 @@ export default function ProfileSettings() {
                 accept="image/*"
                 className="hidden"
                 onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    image: URL.createObjectURL(e.target.files![0]),
-                  });
+                  if (e.target.files?.[0]) {
+                    setFormData({
+                      ...formData,
+                      image: URL.createObjectURL(e.target.files[0]),
+                    });
+                  }
                 }}
               />
               {formData.image ? (
@@ -117,12 +119,13 @@ export default function ProfileSettings() {
                 />
               )}
               <div className="absolute right-0 top-0 translate-x-2/4">
-                {formData.image ?? user?.image ? (
+                {(formData.image || user?.image) && (
                   <Trash
                     className="h-4 w-4"
                     onClick={() => setFormData({ ...formData, image: "" })}
                   />
-                ) : (
+                )}
+                {!formData.image && !user?.image && (
                   <label htmlFor="image">
                     <FileEditIcon className="h-4 w-4" />
                   </label>
@@ -185,7 +188,7 @@ export default function ProfileSettings() {
   );
 }
 
-function FileEditIcon(props) {
+function FileEditIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
