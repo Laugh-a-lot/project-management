@@ -13,7 +13,13 @@ export default {
       const site = new NextjsSite(stack, "site", {
         environment: {
           DATABASE_URL: process.env.DATABASE_URL!,
-          
+          DIRECT_URL: process.env.DIRECT_URL!,
+          NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
+          NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
+          NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
+          AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!
         },
       });
 
