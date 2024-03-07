@@ -20,6 +20,7 @@ import { db } from "~/server/db";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
+      email: string;
       id: string;
       // ...other properties
       // role: UserRole;
@@ -39,20 +40,21 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+        },
+      };
+    },
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
   },
-  adapter: PrismaAdapter(db) as Adapter,
+  // adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
     /**
      * ...add more providers here.
      *
