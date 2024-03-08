@@ -8,6 +8,7 @@ export default {
       region: "us-east-1",
     };
   },
+  
   stacks(app) {
     app.stack(function Site({ stack }) {
       const site = new NextjsSite(stack, "site", {
